@@ -43,7 +43,7 @@ esac
 # uncomment for a colored prompt, if the terminal has the capability; turned
 # off by default to not distract the user: the focus in a terminal window
 # should be on the output of commands, not on the prompt
-#force_color_prompt=yes
+force_color_prompt=yes
 
 if [ -n "$force_color_prompt" ]; then
     if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
@@ -56,8 +56,54 @@ if [ -n "$force_color_prompt" ]; then
     fi
 fi
 
+reset="\[\e[0m\]"
+
+blue="\[\e[34m\]"
+cyan="\[\e[36m\]"
+green="\[\e[32m\]"
+orange="\[\e[1;31m\]"
+purple="\[\e[1;35m\]"
+red="\[\e[31m\]"
+yellow="\[\e[33m\]"
+
+base00="\[\e[1;33m\]"
+base01="\[\e[1;32m\]"
+base02="\[\e[30m\]"
+base03="\[\e[1;30m\]"
+
+base0="\[\e[1;34m\]"
+base1="\[\e[1;36m\]"
+base2="\[\e[37m\]"
+base3="\[\e[1;37m\]"
+
+white="$base3"
+black="$base03"
+
+if [[ "$USER" == "root" ]]; then
+  userStyle="$red"
+else
+  userStyle="$blue"
+fi
+
+# connected via ssh
+if [[ "$SSH_TTY" ]]; then
+  hostStyle="$red"
+else
+  hostStyle="$blue"
+fi
+
 if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+    # PS1="\[\033]0;\w\007\]"
+    PS1="${userStyle}\u" # username
+    PS1+="${reset}${hostStyle}@"
+    PS1+="${reset}${hostStyle}\h" # host
+    PS1+="${reset}${base0} "
+    PS1+="${reset}${base01}[\!] " # bash history number
+    PS1+="${reset}${base0}\w" # working directory
+    PS1+="\n"
+    PS1+="${reset}\$ " # $ (and reset color)
+
+    # PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h [\!] \w\n\$ '
 fi
@@ -114,16 +160,13 @@ if ! shopt -oq posix; then
   fi
 fi
 
-export PATH=/home/andrew/.cabal/bin:$PATH
-export PATH=/opt/ghc/7.10.3/bin:$PATH
-export PATH=/opt/cabal/1.22/bin:$PATH
-export HADDOCK=/home/andrew/.local/bin/haddock
-export PATH=/home/andrew/.local/bin:$PATH
-export PATH=/home/andrew/arcanist/arcanist/bin:$PATH
-export TERM="xterm-16color"
-
+# Configure PATH
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/arcanist/arcanist/bin:$PATH"
 export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 
+# random other things
+export TERM="xterm-16color"
 export FIGNORE=".hi:"
 alias irssi='TERM=screen-256color irssi'
 
