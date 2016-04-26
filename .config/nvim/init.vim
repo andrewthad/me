@@ -19,7 +19,10 @@ let g:haskell_enable_recursivedo = 1
 let g:haskell_enable_arrowsyntax = 1 
 let g:haskell_enable_pattern_synonyms = 1 
 let g:haskell_enable_typeroles = 1 
-let g:haskell_enable_static_pointers = 1 
+" let g:haskell_enable_static_pointers = 1 
+
+set nowrap
+set statusline=%<%f\ %h%m%r\ %y%=%{v:register}\ %-14.(%l,%c%V%)\ %P
 
 " Turn on solarized
 set background=dark
@@ -39,6 +42,7 @@ hi Pmenu     cterm=bold ctermfg=0 ctermbg=7
 " Enable deoplete
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#max_list = 10
+let g:deoplete#auto_complete_delay = 200
 
 " Disable haskell-vim omnifunc
 let g:haskellmode_completion_ghc = 0
