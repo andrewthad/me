@@ -1,12 +1,10 @@
-call plug#begin('~/.local/nvim/plugged')
+call plug#begin('~/.vim_plugged')
 
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'neovimhaskell/haskell-vim'
 Plug 'altercation/vim-colors-solarized'
-Plug 'Shougo/deoplete.nvim'
-Plug 'eagletmt/neco-ghc'
 
 call plug#end()
 
@@ -28,8 +26,10 @@ set statusline=%<%f\ %h%m%r\ %y%=%{v:register}\ %-14.(%l,%c%V%)\ %P
 set background=dark
 colorscheme solarized
 
-" Disable any indentation features for haskell
+" Disable any indentation features for certain languages
 autocmd Filetype haskell setlocal ts=2 sw=2 expandtab noautoindent nocindent nosmartindent
+autocmd Filetype yaml setlocal ts=2 sw=2 expandtab noautoindent nocindent nosmartindent
+autocmd Filetype json setlocal ts=2 sw=2 expandtab noautoindent nocindent nosmartindent
 
 " Improve some of the coloring choices. These
 " are chosen with the solarized color scheme 
@@ -39,11 +39,15 @@ hi Structure ctermfg=4 cterm=none
 hi Todo      ctermfg=1 cterm=none
 hi Pmenu     cterm=bold ctermfg=0 ctermbg=7
 
-" Enable deoplete
-let g:deoplete#enable_at_startup = 1
-let g:deoplete#max_list = 10
-let g:deoplete#auto_complete_delay = 200
-
 " Disable haskell-vim omnifunc
 let g:haskellmode_completion_ghc = 0
+let g:haskell_indent_disable = 1
 autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
+
+" Do not create swap files in same directory as files I edit.
+" The double slash at the end is important. It tells vim to
+" recreate the entire directory leading up to the file. This
+" prevents collisions.
+set backupdir=~/.vim/backup_files//
+set directory=~/.vim/swap_files//
+set undodir=~/.vim/undo_files//
